@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>LED On / off with Javascript</h2>
+
+
+
+<button onclick="toggleLED(true)">Turn on the light</button>
+
+<img id="myImage" src="Images/pic_bulboff.gif" style="width:100px">
+
+<button onclick="toggleLED(false)">Turn off the light</button>
+<script>
+    function toggleLED(on)
+    {
+        if(on)
+        {
+        requestUrl("/lab4_3.php?led1=on");
+        document.getElementById('myImage').src='Images/pic_bulbon.gif';       
+        }
+        else
+        {
+        requestUrl("/lab4_3.php?led1=off");
+        document.getElementById('myImage').src='Images/pic_bulboff.gif'; 
+        }
+
+    }
+    function requestUrl(url)
+    {
+        var xhttp=new XMLHttpRequest();
+        xhttp.open("GET",url,true)
+        xhttp.send();
+    }
+
+</script>
+</body>
+</html>

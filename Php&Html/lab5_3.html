@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>LED On / off with Javascript</h2>
+
+<table style="width:100px;">
+    <tr>
+        <th>LED01</th>
+        <th>LED02</th>
+        <th>LED03</th>
+        <th>LED04</th>
+    </tr>
+    <tr>
+        <td><img id="led1" src="https://www.w3schools.com/js/pic_bulboff.gif" style="width: 20px;" onclick="toggleLED(this.id)"></td>
+        <td><img id="led2" src="https://www.w3schools.com/js/pic_bulboff.gif" style="width: 20px;" onclick="toggleLED(this.id)"></td>
+        <td><img id="led3" src="https://www.w3schools.com/js/pic_bulboff.gif" style="width: 20px;" onclick="toggleLED(this.id)"></td>
+        <td><img id="led4" src="https://www.w3schools.com/js/pic_bulboff.gif" style="width: 20px;" onclick="toggleLED(this.id)"></td>
+    </tr>
+</table>
+<p id="responseText"></p>
+
+<script>
+    var bulbOn="https://www.w3schools.com/js/pic_bulbon.gif";
+    var bulbOff="https://www.w3schools.com/js/pic_bulboff.gif";
+
+    function toggleLED(ledId)
+    {   
+        var img=document.getElementById(ledId);
+        
+        if(img.src==bulbOn)
+        {
+            
+        // print (ledId+"is On function")
+        // document.write(ledId+"is equal to button on");
+            img.src=bulbOff;
+            requestUrl("/lab5_3.php?id="+ledId+"&status=off");
+            
+             
+        }
+        // else
+        if(img.src==bulbOff)
+        {
+            img.src=bulbOn;
+            // print(ledId+"is Off function")
+            requestUrl("/lab5_3.php?id="+ledId+"&status=on");
+        }
+
+    }
+    function requestUrl(url)
+    {
+        var xhttp=new XMLHttpRequest();
+        xhttp.open("GET",url,true)
+        xhttp.send();
+    }
+    function refreshLedStatus(){
+        var leds=["led1","led2","led3","led4"];
+        leds.forEach(function(ledId)
+        {
+            var xhttp=new XMLHttpRequest();
+            xhttp.onreadystatechange=function(){
+                if(this.readyState==4 && this.status==200)
+                {
+                    var response=this.responseText;
+                    var img=document.getElementById(ledId);
+                    if(response=='1')
+                    {
+                        img.src=bulbOn;
+                    }
+                    else if (response=='0')
+                    {
+                        img.src=bulbOff;
+                    } 
+                    
+                }
+              }
+              xhttp.open("GET","/lab5_3.php?id="+ledId,true);
+                     xhttp.send();
+            });
+
+        }
+       
+    window.onload=function()
+    {
+        refreshLedStatus();
+    };
+    setInterval(refreshLedStatus,1000)
+
+
+</script>
+</body>
+</html>
