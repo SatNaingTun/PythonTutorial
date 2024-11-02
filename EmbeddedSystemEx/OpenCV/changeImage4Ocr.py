@@ -62,12 +62,29 @@ if(img is not None):
 # (thresh, im_bw) = cv2.threshold(im_gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
 
     thresh = 120
-    im_WhiteOnBlack = cv2.threshold(cropped_image, thresh, 255, cv2.THRESH_BINARY)[1]
+    blurred = cv2.GaussianBlur(cropped_image, (5, 5), 0)
+    # adaptive_thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    im_WhiteOnBlack = cv2.threshold(blurred, thresh, 255, cv2.THRESH_BINARY)[1]
     im_bw = cv2.bitwise_not(im_WhiteOnBlack)
     fig.add_subplot(rows, columns, 4)
     plt.imshow(im_bw)
     plt.axis('off') 
-    plt.title("BW") 
+    plt.title("BW")
+    
+
+    _, thresh_image = cv2.threshold(cropped_image, 150, 255, cv2.THRESH_BINARY)
+    denoised_image = cv2.GaussianBlur(thresh_image, (5, 5), 0)
+    # im_bw = cv2.bitwise_not(denoised_image)
+
+    # _, binary = cv2.threshold(cropped_image, 150, 255, cv2.THRESH_BINARY_INV)
+    # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
+    # dilated = cv2.dilate(binary, kernel, iterations=1)
+    # resized = cv2.resize(dilated, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+    # fig.add_subplot(rows, columns, 4)
+    # plt.imshow(dilated)
+    # plt.axis('off') 
+    # plt.title("Processed")
+    # cv2.imwrite('processed_image.jpg', resized) 
     # cv2.imshow("Inverted Image",im_bw)
 
     closing = cv2.morphologyEx(im_bw, cv2.MORPH_CLOSE, kernel)
@@ -76,11 +93,13 @@ if(img is not None):
     plt.axis('off') 
     plt.title("Closing") 
     # cv2.imshow("Closing Image",closing )
+    cv2.imwrite('processed_image.jpg', closing) 
 
 # cv2.imshow("After threshold",im_bw)
 # plt.imshow("BW",im_bw)
 # plt.show()
 
     # cv2.waitKey(0)
-    result=pytesseract.image_to_string(closing)
+    custom_config = r'--oem 3 --psm 6'
+    result=pytesseract.image_to_string('processed_image.jpg', config=custom_config)
     print(result)
