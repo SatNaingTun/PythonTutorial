@@ -22,5 +22,6 @@ for i in range(image.shape[0]):
     for j in range(image.shape[1]):
         print(f"element x {i} y {j} val {image[i,j,1]}")
 
+cv2.imwrite("images/size13x13-blue.png", image)  # Save the modified image
 cv2.waitKey(0)
 cv2.destroyAllWindows()

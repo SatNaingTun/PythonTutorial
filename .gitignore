@@ -1,0 +1,5 @@
+.ipynb_checkpoints/
+.venv/
+DLCV/.venv/
+DLCV/outputs/
+DLCV/images/Screenshots/
